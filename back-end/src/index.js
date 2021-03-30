@@ -1,12 +1,14 @@
 const express = require('express');
-const { uuid } = require('uuidv4');
+const cors = require('cors')
+const { v4: uuid } = require('uuid');
 
 const port = 3333;
 const app = express();
+
+app.use(cors());
 app.use(express.json());
 
 const projects = [];
-
 
 //MIDDLEWARE
 
@@ -52,7 +54,7 @@ app.patch('/projects', (request, response) => {
     return response.status(400).json({ error: 'Project not found' });
   } else {
 
-    const project = { id,title,owner };
+    const project = { id, title, owner };
   
     projects[projectIndex] = project;
     return response.json(project);
