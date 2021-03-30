@@ -4,7 +4,8 @@ import Header from './components/Header'
 
 function App() {
 
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState([]); /* ← This is how we'll work with states in React */
+  /* First thing first, declare a const "name" and add "set" before the "name" of variable, like this examples above */
 
   useEffect(() => {
     api.get('projects').then(response => {
