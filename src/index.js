@@ -5,35 +5,54 @@ const port = 3333;
 const app = express();
 app.use(express.json());
 
-const projects = []; 
+const projects = [];
+
+
+//MIDDLEWARE
+
+function logRequests(request, response, next){
+  const { method, url } = request;
+
+  const logLabel = `[${method.toUpperCase()}] ${url}`;
+
+  return next();
+};
+
+app.use(logRequests);
+
+//ROUTES
 
 app.get('/projects', (request, response) => {
 
   //This examples can be categorized on Query Params
-  const { query } = request.query; //Catch all the objects in query
-  const { tittle, owner } = request.query; //Catch separate objects in query (Split)
+  const { query } = request.query; 
+  // ↑ Catch all the objects in query
+  const { tittle, owner } = request.query; 
+  // ↑ Catch separate objects in query (Split)
 
   return response.json([projects]);
 })
 
 app.patch('/projects', (request, response) => {
-//The most used variables are "id" / "name" / this can be relative 
-  //In this example, we use the /:id parameter
-  //If we change the :id variable to :name, the result of this request will be an object like this → id: value
-  const params = request.params; //Catch all the parameters in query
-  const { id } = request.params; //Catch separate objects in query (Split)
-  const { title, owner } = request.body; //Catch separate objects JSON body (Split)
+
+  /* The most used variables are "id" / "name" / this can be relative 
+  In this example, we use the /:id parameter.
+  If we change the :id variable to :name
+  the result of this request will be an object like this → id: value */
+
+  const params = request.params; 
+  // ↑ Catch all the parameters in query
+  const { id } = request.params; 
+  // ↑ Catch separate objects in query (Split)
+  const { title, owner } = request.body; 
+  // ↑ Catch separate objects JSON body (Split)
   const projectIndex = projects.findIndex(project => project.id === id);
 
   if (projectIndex < 0){
     return response.status(400).json({ error: 'Project not found' });
   } else {
 
-    const project = {
-      id,
-      title,
-      owner,
-    };
+    const project = { id,title,owner };
   
     projects[projectIndex] = project;
     return response.json(project);
